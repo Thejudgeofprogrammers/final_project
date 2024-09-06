@@ -29,16 +29,19 @@ export class HotelRoomService implements IHotelRoomService {
 
     async search(params: SearchRoomsParams): Promise<HotelRoom[]> {
         try {
-            const query: any = { hotel: params.hotel };
-
-            if (params.isEnable !== undefined) {
-                query.isEnable = params.isEnable;
+            const query: any = {
+                isEnabled: true,
             };
-
+          
+            if (params.hotel) {
+                query.hotel = params.hotel;
+            };
+            
             return await this.hotelRoomModel
                 .find(query)
                 .skip(params.offset)
                 .limit(params.limit)
+                .populate('hotel')
                 .exec();
             
         } catch (err) {

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Hotel, HotelDocument } from '../models/hotel.model';
 import { Model, Types } from 'mongoose';
-import { IHotelService, SearchHotelParams, UpdateHotelParams } from '../dto';
+import { IHotelParams, IHotelService, SearchHotelParams, UpdateHotelParams } from '../dto';
 
 @Injectable()
 export class HotelService implements IHotelService {
@@ -10,10 +10,10 @@ export class HotelService implements IHotelService {
         @InjectModel(Hotel.name) private readonly hotelModel: Model<HotelDocument>
     ) {};
 
-    async create(data: any): Promise<Hotel> {
+    async create(hotelParams: IHotelParams): Promise<HotelDocument> {
         try {
-            const createdHotel = new this.hotelModel(data);
-            return await createdHotel.save();
+            const newHotel = new this.hotelModel(hotelParams);
+            return await newHotel.save();
         } catch (err) {
             throw err;  
         };

@@ -33,3 +33,16 @@ export interface IHotelRoomService {
     search(params: SearchRoomsParams): Promise<HotelRoom[]>;
     update(id: Types.ObjectId | string, data: Partial<HotelRoom>): Promise<HotelRoom>;
 };
+
+export interface IHotelRoom {
+    _id: Types.ObjectId;
+    hotel: Types.ObjectId | IHotelParams;
+    description: string;
+    image: string[];
+    isEnable: boolean;
+};
+
+export interface IHotelParams {
+    title: string;
+    description?: string;
+};
