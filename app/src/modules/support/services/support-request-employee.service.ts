@@ -14,7 +14,11 @@ export class SupportRequestEmployeeService implements ISupportRequestEmployeeSer
         try {
             const supportRequest = await this.supportRequestModel.findById(params.supportRequest);
             supportRequest.messages.forEach(message => {
-                if (message.readAt && !message.author.equals(params.user) && message.sentAt < params.createdBefore) {
+                if (
+                    !message.readAt &&
+                    message.author.equals(params.user) &&
+                    message.sentAt < params.createdBefore
+                ) {
                     message.readAt = new Date();
                 };
             });
@@ -26,7 +30,7 @@ export class SupportRequestEmployeeService implements ISupportRequestEmployeeSer
 
     async getUnreadCount(supportRequest: Types.ObjectId | string): Promise<number> {
         try {
-            const request = await this.supportRequestModel.findById(supportRequest).exec();
+            const request = await this.supportRequestModel.findById(supportRequest);
             return request.messages.filter(
                 message => !message.readAt && !message.author.equals(request.user)
             ).length;

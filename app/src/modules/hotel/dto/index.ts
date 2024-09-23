@@ -1,11 +1,11 @@
 import { Types } from "mongoose";
-import { Hotel } from "../models/hotel.model";
+import { Hotel, HotelDocument } from "../models/hotel.model";
 import { HotelRoom } from "../models/hotel-room.model";
 
 export interface SearchHotelParams {
     limit: number;
     offset: number;
-    title: string;
+    title?: string;
 };
 
 export interface UpdateHotelParams {
@@ -35,14 +35,20 @@ export interface IHotelRoomService {
 };
 
 export interface IHotelRoom {
-    _id: Types.ObjectId;
+    _id?: Types.ObjectId | string;
     hotel: Types.ObjectId | IHotelParams;
     description: string;
-    image: string[];
+    images: string[];
     isEnable: boolean;
 };
 
 export interface IHotelParams {
+    _id?: Types.ObjectId | string;
     title: string;
     description?: string;
+    isEnable?: boolean;
+};
+
+export interface HotelWithId extends HotelDocument {
+    _id: Types.ObjectId;
 };

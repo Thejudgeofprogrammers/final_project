@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Types } from "mongoose";
 
-export type HotelRoomDocument = HotelRoom & Document;
+export type HotelRoomDocument = HotelRoom & Document & { _id: Types.ObjectId };;
 
 @Schema({ timestamps: true })
 export class HotelRoom {
@@ -12,7 +12,7 @@ export class HotelRoom {
     description: string;
 
     @Prop({ type: [String], default: [] })
-    image: string[];
+    images: string[];
 
     @Prop({ required: true, default: true })
     isEnable: boolean;

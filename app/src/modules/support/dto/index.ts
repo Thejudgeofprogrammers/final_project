@@ -4,17 +4,6 @@ import { Message } from "../models/message.model";
 
 type ID = Types.ObjectId | string;
 
-export interface CreateSupportRequestDTO {
-    user: ID;
-    text: string;
-};
-  
-export interface SendMessageDTO {
-    author: ID;
-    supportRequest: ID;
-    text: string;
-};
-
 export interface MarkMessagesAsReadDTO {
     user: ID;
     supportRequest: ID;
@@ -45,4 +34,23 @@ export interface ISupportRequestEmployeeService {
     markMessagesAsRead(params: MarkMessagesAsReadDTO);
     getUnreadCount(supportRequest: ID): Promise<number>;
     closeRequest(supportRequest: ID): Promise<void>;
+};
+
+export interface CreateSupportRequestDTO {
+    user: ID;
+    text: string;
+};
+
+export interface SendMessageDTO {
+    author: ID;
+    supportRequest: ID;
+    text: string;
+};
+
+export interface ISupportRequest {
+    _id: string;
+    userId: string;
+    createAt: Date;
+    isActive: boolean;
+    hasNewMessages: boolean;
 };
