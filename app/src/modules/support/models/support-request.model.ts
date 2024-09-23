@@ -16,7 +16,10 @@ export class SupportRequest {
     messages: Message[]; 
 
     @Prop()
-    isActive: boolean
+    isActive: boolean;
+
+    @Prop({ default: false })
+    hasNewMessages: boolean;
 };
 
 export const SupportRequestSchema = SchemaFactory.createForClass(SupportRequest);

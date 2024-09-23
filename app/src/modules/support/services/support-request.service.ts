@@ -26,6 +26,59 @@ export class SupportRequestService implements ISupportRequestService {
         };
     };
 
+    async findAllByUser(userId: string, query: any) {
+        const { limit = 10, offset = 0, isActive } = query;
+
+        const filter: any = { userId };
+
+        if (isActive !== undefined) {
+            filter.isActive = isActive === 'true';
+        }
+
+        const supportRequests = await this.supportRequestModel
+            .find(filter)
+            .skip(offset)
+            .limit(limit)
+            .exec();
+
+        return supportRequests.map(req => ({
+            id: req._id,
+            createAt: req.createAt,
+            isActive: req.isActive,
+            hasNewMessages: req.hasNewMessages
+        }));
+    };
+
+    async findAllForManager(query: any) {
+        const { limit = 10, offset = 0, isActive } = query;
+
+        const filter: any = {};
+
+        if (isActive !== undefined) {
+            filter.isActive = isActive === 'true';
+        };
+
+        const supportRequests = await this.supportRequestModel
+            .find(filter)
+            .skip(offset)
+            .limit(limit)
+            .populate('user', 'id name email contactPhone')
+            .exec();
+
+        return supportRequests.map((req: any) => ({
+            id: req._id,
+            createdAt: req.createAt,
+            isActive: req.isActive,
+            hasNewMessages: req.hasNewMessages,
+            client: {
+                id: req.user._id,
+                name: req.user.name,
+                email: req.user.email,
+                contactPhone: req.user.contactPhone,
+            }
+        }));
+    };
+
     async sendMessage(data: SendMessageDTO): Promise<Message> {
         try {
             const supportRequest = await this.supportRequestModel.findById(data.supportRequest);
@@ -35,7 +88,6 @@ export class SupportRequestService implements ISupportRequestService {
             message.author = data.author as Types.ObjectId;
             message.text = data.text;
             message.sentAt = new Date();
-
 
             supportRequest.messages.push(message);
             await supportRequest.save();

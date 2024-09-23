@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Hotel, HotelDocument } from '../models/hotel.model';
 import { Model, Types } from 'mongoose';
@@ -12,8 +12,8 @@ export class HotelService implements IHotelService {
 
     async create(hotelParams: IHotelParams): Promise<HotelDocument> {
         try {
-            const newHotel = new this.hotelModel(hotelParams);
-            return await newHotel.save();
+            const newHotel = await this.hotelModel.create(hotelParams);
+            return newHotel;
         } catch (err) {
             throw err;  
         };
@@ -21,7 +21,11 @@ export class HotelService implements IHotelService {
 
     async findById(id: Types.ObjectId | string): Promise<Hotel> {
         try {
-            return await this.hotelModel.findById(id).exec();
+            const hotel = await this.hotelModel.findById(id).exec();
+            if (!hotel) {
+                throw new NotFoundException('Hotel not found');
+            }
+            return hotel;
         } catch (err) {
             throw err;
         };

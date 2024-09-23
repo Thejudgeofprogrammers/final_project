@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { IUserService, SearchUserParams } from './dto';
 import { Model, Types } from 'mongoose';
 import { User, UserDocument } from './models/user.model';
 import { InjectModel } from '@nestjs/mongoose';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class UsersService implements IUserService {
@@ -10,12 +11,59 @@ export class UsersService implements IUserService {
         @InjectModel(User.name) private readonly userModel: Model<UserDocument>
     ) {};
 
-    async create(data: Partial<User>): Promise<User> {
+    async createUser(data: Partial<User>): Promise<User> {
         try {
-            const createdUser = new this.userModel(data);
-            return await createdUser.save();
+            const existingUser = await this.findByEmail(data.email);
+            if (existingUser) {
+                throw new ConflictException('Email is already taken');
+            }
+    
+            const hashedPassword = await bcrypt.hash(data.passwordHash, 10);
+    
+            const newUser = {
+                email: data.email,
+                passwordHash: hashedPassword,
+                name: data.name,
+                contactPhone: data.contactPhone,
+                role: 'client',
+            };
+    
+            const createdUser = await this.userModel.create(newUser);
+            return createdUser;
         } catch (err) {
-            throw err;  
+            if (err instanceof ConflictException) {
+                throw new ConflictException('Email is already taken');
+            } else {
+                throw err;
+            };
+        };
+    };
+    
+    async createManager(data: Partial<User>): Promise<User> {
+        try {
+            const existingUser = await this.findByEmail(data.email);
+            if (existingUser) {
+                throw new ConflictException('Email is already taken');
+            };
+            
+            const hashedPassword = await bcrypt.hash(data.passwordHash, 10);
+            
+            const newUser = {
+                email: data.email,
+                passwordHash: hashedPassword,
+                name: data.name,
+                contactPhone: data.contactPhone,
+                role: data.role,
+            };
+            
+            const createdUser = await this.userModel.create(newUser);
+            return createdUser;
+        } catch (err) {
+            if (err instanceof ConflictException) {
+                throw new ConflictException('Email is already taken');
+            } else {
+                throw err;
+            };
         };
     };
 
@@ -48,8 +96,9 @@ export class UsersService implements IUserService {
             };
 
             if (params.contactPhone) {
-                query.contactPhone = new RegExp(params.contactPhone, "i");
-            };
+                const escapedPhone = params.contactPhone.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                query.contactPhone = new RegExp(escapedPhone, "i");
+            }
 
             return await this.userModel
                 .find(query)
