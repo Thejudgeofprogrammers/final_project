@@ -1,6 +1,7 @@
-export interface IRegisterUserDTO {
-    email: string;
-    passwordHash: string;
-    name: string;
-    contactPhone: string;
-};
+export interface IRegisterUserDTO extends Document {
+  email: string;
+  password: string;
+  name: string;
+  contactPhone?: string;
+  role: string;
+}

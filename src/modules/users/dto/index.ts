@@ -5,36 +5,35 @@ import { IsEmail, IsNotEmpty, IsOptional, IsString } from "class-validator";
 type ID = Types.ObjectId | string;
 
 export interface SearchUserParams {
-    limit: number;
-    offset: number;
-    email: string | RegExp;
-    name: string;
-    contactPhone: string;
-};
-
+  email?: string | RegExp;
+  name?: string | RegExp;
+  contactPhone?: string | RegExp;
+  offset?: number;
+  limit?: number;
+}
 export interface IUserService {
-    createUser(data: Partial<User>): Promise<User>;
-    createManager(data: Partial<User>): Promise<User>;
-    findById(id: ID): Promise<User>;
-    findByEmail(email: string): Promise<User>;
-    findAll(params: SearchUserParams): Promise<User[]>;
-};
+  createUser(data: Partial<User>): Promise<User>;
+  createManager(data: Partial<User>): Promise<User>;
+  findById(id: ID): Promise<User>;
+  findByEmail(email: string): Promise<User>;
+  findAll(params: SearchUserParams): Promise<User[]>;
+}
 
 export class UserDTO {
-    @IsEmail()
-    email: string;
+  @IsEmail()
+  email: string;
 
-    @IsNotEmpty()
-    passwordHash: string;
+  @IsNotEmpty()
+  passwordHash: string;
 
-    @IsNotEmpty()
-    name: string;
+  @IsNotEmpty()
+  name: string;
 
-    @IsOptional()
-    @IsString()
-    contactPhone?: string;
+  @IsOptional()
+  @IsString()
+  contactPhone?: string;
 
-    @IsOptional()
-    @IsString()
-    role?: string;
-};
+  @IsOptional()
+  @IsString()
+  role?: string;
+}

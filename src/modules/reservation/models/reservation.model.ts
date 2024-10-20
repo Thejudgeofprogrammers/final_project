@@ -8,20 +8,20 @@ export type ReservationDocument = Reservation & Document;
 
 @Schema()
 export class Reservation {
-    @Prop({ required: true, type: Types.ObjectId, ref: 'User' })
-    userId: Types.ObjectId | User;
+  @Prop({ required: true, type: Types.ObjectId, ref: "User" })
+  userId: Types.ObjectId | User;
 
-    @Prop({ required: true, type: Types.ObjectId, ref: 'Hotel'})
-    hotelId: Types.ObjectId | Hotel;
+  @Prop({ required: true, type: Types.ObjectId, ref: "Hotel" })
+  hotelId: Types.ObjectId | Hotel;
 
-    @Prop({ required: true, type: Types.ObjectId, ref: 'HotelRoom' })
-    roomId: Types.ObjectId | HotelRoom;
+  @Prop({ required: true, type: Types.ObjectId, ref: "HotelRoom" })
+  roomId: Types.ObjectId | HotelRoom;
 
-    @Prop({ required: true, type: Date })
-    dateStart: Date;
+  @Prop({ required: true, type: Date })
+  dateStart: Date;
 
-    @Prop({ required: true, type: Date })
-    dateEnd: Date;
-};
+  @Prop({ required: true, type: Date })
+  dateEnd: Date;
+}
 
 export const ReservationSchema = SchemaFactory.createForClass(Reservation);

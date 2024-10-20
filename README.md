@@ -32,3 +32,42 @@
 
     ```bash
     docker compose up --build
+
+
+
+
+2.3.1. Вход (POST /api/auth/login)
+
+curl -X POST "http://localhost:4000/api/auth/login" \
+-H "Content-Type: application/json" \
+-d '{
+  "email": "user@example.com",
+  "password": "userpassword"
+}'
+
+Ожидаемый ответ:
+
+{
+  "email": "user@example.com",
+  "name": "User Name",
+  "contactPhone": "string"
+}
+
+2.3.3. Регистрация (POST /api/client/register)
+
+curl -X POST "http://localhost:4000/api/client/register" \
+-H "Content-Type: application/json" \
+-d '{
+  "email": "user@example.com",
+  "password": "userpassword",
+  "name": "New User",
+  "contactPhone": "+123456789"
+}'
+
+Ожидаемый ответ:
+
+{
+  "id": "string",
+  "email": "newuser@example.com",
+  "name": "New User"
+}
