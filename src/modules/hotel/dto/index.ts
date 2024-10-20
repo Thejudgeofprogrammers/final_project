@@ -5,52 +5,68 @@ import { HotelRoom } from "../models/hotel-room.model";
 type ID = Types.ObjectId | string;
 
 export interface SearchHotelParams {
-    limit: number;
-    offset: number;
-    title?: string;
-};
+  limit: number;
+  offset: number;
+  title?: string;
+  isEnable?: boolean;
+}
 
 export interface UpdateHotelParams {
-    title: string;
-    description: string;
-};
+  title: string;
+  description: string;
+}
 
 export interface IHotelService {
-    create(data: any): Promise<Hotel>;
-    findById(id: ID): Promise<Hotel>;
-    search(params: SearchHotelParams): Promise<Hotel[]>;
-    update(id: ID, data: UpdateHotelParams): Promise<Hotel>;
-};
+  create(data: Hotel): Promise<Hotel>;
+  findById(id: ID): Promise<Hotel>;
+  search(params: SearchHotelParams): Promise<Hotel[]>;
+  update(id: ID, data: UpdateHotelParams): Promise<Hotel>;
+}
 
 export interface SearchRoomsParams {
-    limit: number;
-    offset: number;
-    hotel: ID;
-    isEnable?: boolean;
-};
+  limit: number;
+  offset: number;
+  hotel: ID;
+  isEnable?: boolean;
+}
 
 export interface IHotelRoomService {
-    create(data: Partial<HotelRoom>): Promise<HotelRoom>;
-    findById(id: ID): Promise<HotelRoom>;
-    search(params: SearchRoomsParams): Promise<HotelRoom[]>;
-    update(id: ID, data: Partial<HotelRoom>): Promise<HotelRoom>;
-};
+  create(data: Partial<HotelRoom>): Promise<HotelRoom>;
+  findById(id: ID): Promise<HotelRoom>;
+  search(params: SearchRoomsParams): Promise<HotelRoom[]>;
+  update(id: ID, data: Partial<HotelRoom>): Promise<HotelRoom>;
+}
 
 export interface IHotelRoom {
-    _id?: ID;
-    hotel: Types.ObjectId | IHotelParams;
+  _id: Types.ObjectId;
+  title: string;
+  description: string;
+}
+
+export interface IHotel {
+  _id?: ID;
+  hotel: {
+    _id: Types.ObjectId;
+    title: string;
     description: string;
-    images: string[];
-    isEnable: boolean;
-};
+  };
+  description: string;
+  images: string[];
+}
 
 export interface IHotelParams {
-    _id?: ID;
-    title: string;
-    description?: string;
-    isEnable?: boolean;
-};
+  _id?: Types.ObjectId | string;
+  title: string;
+  description?: string;
+  isEnable?: boolean;
+}
 
 export interface HotelWithId extends HotelDocument {
-    _id: Types.ObjectId;
-};
+  _id: Types.ObjectId;
+}
+
+export interface ICreateHotelRoomDTO {
+  title: string;
+  description: string;
+  hotelId: Types.ObjectId;
+}

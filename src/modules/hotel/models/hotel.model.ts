@@ -5,11 +5,13 @@ export type HotelDocument = Hotel & Document & { _id: Types.ObjectId };
 
 @Schema({ timestamps: true })
 export class Hotel {
-    @Prop({ required: true, unique: true })
-    title: string;
+  @Prop({ required: true, unique: true })
+  title: string;
 
-    @Prop()
-    description: string;
-};
+  @Prop()
+  description: string;
+
+  _id: Types.ObjectId;
+}
 
 export const HotelSchema = SchemaFactory.createForClass(Hotel);
